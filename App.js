@@ -1,16 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+
 
 import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableHighlight,
 } from 'react-native';
+import Camera from 'react-native-camera';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -20,19 +18,25 @@ const instructions = Platform.select({
 });
 
 export default class App extends Component<{}> {
+  clickme(){
+    alert("was touched");
+
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-          Hello!!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+          <Camera
+            ref={(cam) => {
+              this.camera = cam;
+            }}
+      onBarCodeRead={this.onBarCodeRead.bind(this)}
+            style={styles.preview}
+            aspect={Camera.constants.Aspect.fill}>
+            <TouchableHighlight onPress = {this.clickme.bind(this)}>
+              <View> style = {{height:50, width:50, backgroundColor:"white"}}</View>
+            </TouchableHighlight>
+          </Camera>
       </View>
     );
   }
@@ -54,5 +58,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
 });
